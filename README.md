@@ -124,12 +124,13 @@ root@ubuntu:/home/git/vank3f3/base #
 根提交
 ```
 root@ubuntu:/home/git/vank3f3/base # git commit -a -m "first commit"
-master （根提交） 15934b7] first commit
- 4 files changed, 11 insertions(+)
- create mode 100644 .dockerignore
- create mode 100644 .gitignore
- create mode 100644 Dockerfile
- create mode 100644 README.md
+ 
+[master (root-commit) 1249a59] first commit
+3 files changed, 308 insertions(+)
+create mode 100644 Dockerfile
+create mode 100644 README.md
+create mode 100644 images/1.png
+
 ```
 再次查看状态，可以看到一个干净的工作区
 ```
