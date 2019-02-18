@@ -77,12 +77,6 @@ root@ubuntu:/home/git/vank3f3/base # docker run --rm vank3f3/base:alpine3.5 cat 
 
 ### 三、同步本地仓库到远端GitHub
 
-关联GitHub
-```
-root@ubuntu:/home/git/vank3f3/base # git config --global user.email vank3f3@XXXXX.com
-root@ubuntu:/home/git/vank3f3/base # git config --global user.name vank3f3
-```
-
 查看当前状态
 ```
 root@ubuntu:/home/git/vank3f3/base # git status
@@ -135,51 +129,52 @@ create mode 100644 images/1.png
 再次查看状态，可以看到一个干净的工作区
 ```
 root@ubuntu:/home/git/vank3f3/base # git status
-位于分支 master
-无文件要提交，干净的工作区
+On branch master
+Your branch is based on 'origin/master', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+nothing to commit, working directory clean
+
 ```
 配置上传到远端GitHub仓库,
 
 ```
-git config --global user.email "lihaixin@15099.net"
-git config --global user.name "lihaixin"
+git config --global user.email "vank3f3@xxxx.com"
+git config --global user.name "vank3f3"
 cat ~/.gitconfig 
-[user]
-	email = lihaixin@15099.net
-	name = lihaixin
-[http]
-	proxy = http://192.168.3.106:8123
-[https]
-	proxy = https://192.168.3.106:8123
-[color]
-	ui = auto
 ```
 添加origin标识符为远端仓库名称
 ```
-root@ubuntu:/home/git/vank3f3/base #git remote add origin https://github.com/lihaixin/base.git
-root@ubuntu:/home/git/vank3f3/base # cat .git/config 
+root@ubuntu:/home/git/vank3f3/base # git remote add origin https://github.com/vank3f3/base.git
+root@ubuntu:/home/git/vank3f3/base # cat .git/config
 [core]
-	repositoryformatversion = 0
-	filemode = false
-	bare = false
-	logallrefupdates = true
+        repositoryformatversion = 0
+        filemode = false
+        bare = false
+        logallrefupdates = true
+        symlinks = false
+        ignorecase = true
 [remote "origin"]
-	url = https://github.com/lihaixin/base.git
-	fetch = +refs/heads/*:refs/remotes/origin/*
+        url = https://github.com/vank3f3/base.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+
 ```
 推送到远端GitHub
 ```
 git push -u origin master
-Username for 'https://github.com': <--输入用户名
-Password for 'https://lihaixin@github.com': <--输入密码
-Counting objects: 5, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (5/5), 435 bytes | 0 bytes/s, done.
-Total 5 (delta 0), reused 0 (delta 0)
-To https://github.com/lihaixin/base.git
+Username for 'https://github.com': 			----> 输入用户名
+Password for 'https://vank3f3@github.com':  ----> 输入密码
+Counting objects: 9, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (9/9), 33.81 KiB | 0 bytes/s, done.
+Total 9 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), done.
+To https://github.com/vank3f3/base.git
  * [new branch]      master -> master
-分支 master 设置为跟踪来自 origin 的远程分支 master。
+Branch master set up to track remote branch master from origin.
 ```
 可以看到上面把本地的master分支上传到远端的master分支
 
@@ -207,89 +202,92 @@ root@ubuntu:/home/git/vank3f3/base #
 
 
 ```
- # vi Dockerfile 
-#
-# Dockerfile for base:ubuntu16.04
-#
 
+echo '
 FROM ubuntu:16.04
-MAINTAINER Lee <noreply@lihaixin.name>
-LABEL "vendor"="lihaixin.name" \
-      "author"="Haixin Lee"
+MAINTAINER vank3f3
+LABEL "vendor"="vank3f3"  "author"="vank3f3"
+'> Dockerfile
+
 ```
 #### 4.4 验证dockerfile是否正确
 ```
-root@ubuntu:/home/git/vank3f3/base # docker build -t lihaixin/base:ubuntu16.04 .
-Sending build context to Docker daemon  5.632kB
+root@ubuntu:/home/git/vank3f3/base # docker build -t vank3f3/base:ubuntu16.04 .
+Sending build context to Docker daemon  155.1kB
 Step 1/3 : FROM ubuntu:16.04
 16.04: Pulling from library/ubuntu
-aafe6b5e13de: Already exists 
-0a2b43a72660: Already exists 
-18bdd1e546d2: Already exists 
-8198342c3e05: Already exists 
-f56970a44fd4: Already exists 
-Digest: sha256:f3a61450ae43896c4332bda5e78b453f4a93179045f20c8181043b26b5e79028
+7b722c1070cd: Pull complete 
+5fbf74db61f1: Pull complete 
+ed41cb72e5c9: Pull complete 
+7ea47a67709e: Pull complete 
+Digest: sha256:e4a134999bea4abb4a27bc437e6118fdddfb172e1b9d683129b74d254af51675
 Status: Downloaded newer image for ubuntu:16.04
- ---> f7b3f317ec73
-Step 2/3 : MAINTAINER Lee <noreply@lihaixin.name>
- ---> Running in 3deb0b22fd40
- ---> 552067c91f69
-Removing intermediate container 3deb0b22fd40
-Step 3/3 : LABEL "vendor" "lihaixin.name" "author" "Haixin Lee"
- ---> Running in d10456510147
- ---> 50451e045f77
-Removing intermediate container d10456510147
-Successfully built 50451e045f77
-Successfully tagged lihaixin/base:ubuntu16.04
-root@ubuntu:/home/git/vank3f3/base # 
+ ---> 7e87e2b3bf7a
+Step 2/3 : MAINTAINER vank3f3
+ ---> Running in c4f587d05616
+Removing intermediate container c4f587d05616
+ ---> b933aadfc44b
+Step 3/3 : LABEL "vendor"="vank3f3"  "author"="vank3f3"
+ ---> Running in 994b602b275a
+Removing intermediate container 994b602b275a
+ ---> 3e65a79c3663
+Successfully built 3e65a79c3663
+Successfully tagged vank3f3/base:ubuntu16.04
+
 ```
 
 
 #### 4.4 添加分支内容
 ```
 root@ubuntu:/home/git/vank3f3/base # git status
-位于分支 ubuntu16.04
-要提交的变更：
-  （使用 "git reset HEAD <文件>..." 以取消暂存）
+On branch ubuntu16.04
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
 
-	修改:         Dockerfile
+        modified:   Dockerfile
+        modified:   README.md
 
-root@ubuntu:/home/git/vank3f3/base # git commit -a -m "Change to ubuntu:16.04 base"
-[ubuntu16.04 e81e626] Change to ubuntu:16.04 base
- 1 file changed, 2 insertions(+), 2 deletions(-)
-root@ubuntu:/home/git/vank3f3/base # git status
-位于分支 ubuntu16.04
-无文件要提交，干净的工作区
-root@ubuntu:/home/git/vank3f3/base # 
+no changes added to commit (use "git add" and/or "git commit -a")
+
+root@ubuntu-xenial:/vagrant/git/vank3f3/base# git add ./
+root@ubuntu-xenial:/vagrant/git/vank3f3/base# git status
+On branch ubuntu16.04
+Your branch is up-to-date with 'origin/ubuntu16.04'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+        modified:   Dockerfile
+        modified:   README.md
+
 ```
 #### 4.5 推送到远端GitHub ubuntu16.04分支下
 
 ```
 root@ubuntu:/home/git/vank3f3/base # git push -u origin ubuntu16.04
 Username for 'https://github.com': <--输入用户名
-Password for 'https://lihaixin@github.com': <--输入密码
-Counting objects: 5, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (3/3), 387 bytes | 0 bytes/s, done.
-Total 3 (delta 1), reused 0 (delta 0)
-remote: Resolving deltas: 100% (1/1), completed with 1 local object.
-To https://github.com/lihaixin/base.git
+Password for 'https://vank3f3@github.com': <--输入密码
+Total 0 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'ubuntu16.04' on GitHub by visiting:
+remote:      https://github.com/vank3f3/base/pull/new/ubuntu16.04
+remote: 
+To https://github.com/vank3f3/base.git
  * [new branch]      ubuntu16.04 -> ubuntu16.04
-分支 ubuntu16.04 设置为跟踪来自 origin 的远程分支 ubuntu16.04。
+Branch ubuntu16.04 set up to track remote branch ubuntu16.04 from origin.
 ```
 
 
 #### 4.6 检验一下远端是否有分支
 
-![github branch](https://raw.githubusercontent.com/lihaixin/base/master/images/1.png)
+![github branch](https://raw.githubusercontent.com/vank3f3/base/master/images/2.png)
 
 
 ### 五、在另外一台电脑上克隆仓库和获取最新的远程分支
 
 下面是操作命令，我就不把输入列出了
 ```
-git clone https://github.com/lihaixin/base.git
+git clone https://github.com/vank3f3/base.git
 git branch -a
 git checkout -b ubuntu16.04 origin/ubuntu16.04
 ```
